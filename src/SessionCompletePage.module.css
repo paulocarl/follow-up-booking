@@ -99,7 +99,7 @@
 .leftStack {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 12px;
   text-align: left;
   max-width: 649px;
   margin-inline: 0;
@@ -109,7 +109,7 @@
   .leftStack {
     text-align: left;
     margin-inline: 0;
-    gap: 24px;
+    gap: 16px;
     max-width: 649px;
     justify-self: start;
   }

@@ -117,7 +117,7 @@ button.logoLink {
 .introCol {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 16px;
   align-items: flex-start;
   text-align: left;
   width: 100%;
@@ -129,7 +129,7 @@ button.logoLink {
   .introCol {
     max-width: 649px;
     justify-self: start;
-    gap: 24px;
+    gap: 16px;
   }
 }
 
