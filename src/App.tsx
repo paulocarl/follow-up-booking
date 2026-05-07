@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { AppointmentConfirmedPage } from './AppointmentConfirmedPage'
 import { FiveStarFeedbackThankYouPage } from './FiveStarFeedbackThankYouPage'
 import { ProviderRecommendationsPage } from './ProviderRecommendationsPage'
@@ -8,8 +7,12 @@ import { captureSessionPageHeightForHandoff } from './sessionPageHandoff'
 import { clearHandoffPageMinHeight } from './sessionPageHandoff'
 import styles from './App.module.css'
 
-const routerBasename =
-  import.meta.env.BASE_URL === '/' ? undefined : import.meta.env.BASE_URL.replace(/\/$/, '')
+/** Old route paths from when this demo used the history API — strip so the URL stays the app root only. */
+const LEGACY_ROUTE_TAILS = [
+  '/appointment-confirmed',
+  '/provider-recommendations',
+  '/follow-up-booked-high-feedback',
+] as const
 
 type FollowUpDemoMode = 'noFollowUp' | 'alreadyBooked'
 
@@ -29,7 +32,36 @@ function ScrollToTopOnScreenChange({ screen }: { screen: PrototypeScreen }) {
   return null
 }
 
+function normalizePrototypeUrlOnce() {
+  const pathSansTrailingSlash = window.location.pathname.replace(/\/+$/, '') || '/'
+
+  let nextPathname = pathSansTrailingSlash
+  for (const tail of LEGACY_ROUTE_TAILS) {
+    const t = tail.replace(/\/+$/, '') || tail
+    if (pathSansTrailingSlash === t || pathSansTrailingSlash.endsWith(t)) {
+      nextPathname =
+        pathSansTrailingSlash.slice(0, pathSansTrailingSlash.length - t.length).replace(/\/*$/, '') ||
+        '/'
+      break
+    }
+  }
+
+  if (nextPathname === pathSansTrailingSlash) return
+
+  try {
+    const u = new URL(window.location.href)
+    u.pathname = nextPathname
+    window.history.replaceState(null, '', `${u.pathname}${u.search}${u.hash}`)
+  } catch {
+    /* ignore */
+  }
+}
+
 function PrototypeApp() {
+  useLayoutEffect(() => {
+    normalizePrototypeUrlOnce()
+  }, [])
+
   const [sessionKey, setSessionKey] = useState(0)
   const [followUpDemo, setFollowUpDemo] = useState<FollowUpDemoMode>('noFollowUp')
   const [screen, setScreen] = useState<PrototypeScreen>('home')
@@ -203,10 +235,8 @@ function PrototypeApp() {
 
 export default function App() {
   return (
-    <BrowserRouter basename={routerBasename}>
-      <Routes>
-        <Route path="*" element={<PrototypeApp />} />
-      </Routes>
-    </BrowserRouter>
+    <div className={styles.appFrame}>
+      <PrototypeApp />
+    </div>
   )
 }

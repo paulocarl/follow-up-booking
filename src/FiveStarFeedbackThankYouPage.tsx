@@ -1,7 +1,6 @@
 import gsap from 'gsap'
 import { useLayoutEffect, useRef } from 'react'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { SiteFooter } from './SiteFooter'
 import { readHandoffPageMinHeightPx } from './sessionPageHandoff'
 import styles from './FiveStarFeedbackThankYouPage.module.css'
@@ -88,9 +87,9 @@ export function FiveStarFeedbackThankYouPage({ onLogoHome }: FiveStarFeedbackTha
                     <p className={styles.actionTitle}>Add another follow-up</p>
                     <p className={styles.actionDesc}>Book an additional appointment anytime</p>
                   </div>
-                  <Link className={styles.btnPrimary} to="#">
+                  <a className={styles.btnPrimary} href="#">
                     Schedule additional appointment
-                  </Link>
+                  </a>
                 </div>
                 <div className={styles.actionRow}>
                   <div className={styles.actionText}>
@@ -99,9 +98,9 @@ export function FiveStarFeedbackThankYouPage({ onLogoHome }: FiveStarFeedbackTha
                       Change the date or time of your upcoming appointment with your provider
                     </p>
                   </div>
-                  <Link className={styles.btnSecondary} to="#">
+                  <a className={styles.btnSecondary} href="#">
                     Reschedule follow-up
-                  </Link>
+                  </a>
                 </div>
               </div>
             </div>

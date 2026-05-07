@@ -1,6 +1,5 @@
 import gsap from 'gsap'
 import { useLayoutEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
 import { SiteFooter } from './SiteFooter'
 import styles from './ProviderRecommendationsPage.module.css'
 
@@ -111,12 +110,12 @@ function ProviderCard({ provider }: { provider: RecommendedProvider }) {
           </div>
         </div>
         <div className={styles.cardActions}>
-          <Link className={styles.btnSecondary} to="#">
+          <a className={styles.btnSecondary} href="#">
             View profile
-          </Link>
-          <Link className={styles.btnPrimary} to="#">
+          </a>
+          <a className={styles.btnPrimary} href="#">
             Book session
-          </Link>
+          </a>
         </div>
       </div>
     </article>
@@ -195,9 +194,9 @@ export function ProviderRecommendationsPage({ onLogoHome }: ProviderRecommendati
               ))}
 
               <div className={styles.moreWrap}>
-                <Link className={styles.btnMore} to="#">
+                <a className={styles.btnMore} href="#">
                   See more providers
-                </Link>
+                </a>
                 <div className={styles.supportBlock}>
                   <p className={styles.supportLead}>
                     For real time support in finding the right provider, our team is here to help

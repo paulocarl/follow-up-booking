@@ -156,7 +156,7 @@ button.logoLink {
   line-height: 50px;
   letter-spacing: 0;
   color: var(--color-text-strong);
-  margin: 0;
+  margin: 0 0 -8px;
   text-rendering: optimizeLegibility;
 }
 
@@ -609,6 +609,12 @@ button.portalCta {
   border-radius: 16px;
   background: var(--color-surface);
   box-sizing: border-box;
+}
+
+@media (max-width: 767px) {
+  .lowRatingBanner {
+    background: var(--color-border-subtle);
+  }
 }
 
 .lowRatingBannerText {
