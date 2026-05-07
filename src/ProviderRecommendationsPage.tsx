@@ -123,7 +123,11 @@ function ProviderCard({ provider }: { provider: RecommendedProvider }) {
   )
 }
 
-export function ProviderRecommendationsPage() {
+type ProviderRecommendationsPageProps = {
+  onLogoHome: () => void
+}
+
+export function ProviderRecommendationsPage({ onLogoHome }: ProviderRecommendationsPageProps) {
   const entranceRootRef = useRef<HTMLDivElement>(null)
 
   useLayoutEffect(() => {
@@ -149,8 +153,12 @@ export function ProviderRecommendationsPage() {
     <div className={styles.page} ref={entranceRootRef}>
       <div className={styles.shell}>
         <nav aria-label="Site" className={styles.nav}>
-          <Link to="/" className={styles.logoLink}>
-            <span className={styles.visuallyHidden}>Grow Therapy home</span>
+          <button
+            type="button"
+            className={styles.logoLink}
+            aria-label="Grow Therapy home"
+            onClick={onLogoHome}
+          >
             <img
               className={styles.logo}
               src={`${import.meta.env.BASE_URL}assets/grow-logo.svg`}
@@ -158,7 +166,7 @@ export function ProviderRecommendationsPage() {
               height={32}
               alt=""
             />
-          </Link>
+          </button>
         </nav>
 
         <main className={styles.main}>
@@ -171,9 +179,13 @@ export function ProviderRecommendationsPage() {
                   fit. Based on your details, here are other providers that may be a better match
                   for you.
                 </p>
-                <Link className={styles.returnToPortal} to="#">
+                <button
+                  type="button"
+                  className={styles.returnToPortal}
+                  data-prototype-placeholder
+                >
                   Return to portal
-                </Link>
+                </button>
               </div>
             </header>
 

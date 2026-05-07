@@ -14,7 +14,11 @@ function prefersReducedMotion(): boolean {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
-export function FiveStarFeedbackThankYouPage() {
+type FiveStarFeedbackThankYouPageProps = {
+  onLogoHome: () => void
+}
+
+export function FiveStarFeedbackThankYouPage({ onLogoHome }: FiveStarFeedbackThankYouPageProps) {
   const entranceRootRef = useRef<HTMLDivElement>(null)
   const [handoffMinHeightPx] = useState(() => readHandoffPageMinHeightPx())
 
@@ -45,8 +49,12 @@ export function FiveStarFeedbackThankYouPage() {
     >
       <div className={styles.shell}>
         <nav aria-label="Site" className={styles.nav}>
-          <Link to="/" className={styles.logoLink}>
-            <span className={styles.visuallyHidden}>Grow Therapy home</span>
+          <button
+            type="button"
+            className={styles.logoLink}
+            aria-label="Grow Therapy home"
+            onClick={onLogoHome}
+          >
             <img
               className={styles.logo}
               src={`${import.meta.env.BASE_URL}assets/grow-logo.svg`}
@@ -54,7 +62,7 @@ export function FiveStarFeedbackThankYouPage() {
               height={32}
               alt=""
             />
-          </Link>
+          </button>
         </nav>
 
         <main className={styles.main}>
@@ -64,9 +72,13 @@ export function FiveStarFeedbackThankYouPage() {
               <p className={styles.subline}>
                 You have a follow-up appointment with {PROVIDER_FIRST} on {FOLLOW_UP_DATE}
               </p>
-              <Link className={styles.portalCta} to="#">
+              <button
+                type="button"
+                className={styles.portalCta}
+                data-prototype-placeholder
+              >
                 Go to your portal
-              </Link>
+              </button>
             </header>
 
             <div className={styles.actionsCol} data-confirm-reveal>

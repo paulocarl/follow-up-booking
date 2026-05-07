@@ -1,8 +1,10 @@
 import gsap from 'gsap'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
 import { SiteFooter } from './SiteFooter'
-import { readHandoffPageMinHeightPx } from './sessionPageHandoff'
+import {
+  captureSessionPageHeightForHandoff,
+  readHandoffPageMinHeightPx,
+} from './sessionPageHandoff'
 import styles from './AppointmentConfirmedPage.module.css'
 
 const PROVIDER_NAME = 'Anita Rollins'
@@ -50,14 +52,21 @@ export type AppointmentConfirmedVariant =
   /** Prototype entry: same shell as appointment confirmed, session-complete headline, no provider row */
   | 'sessionCompleteFollowUpBooked'
 
+export type AppointmentReviewHandoffDestination =
+  | 'providerRecommendations'
+  | 'fiveStarThankYou'
+
 type AppointmentConfirmedPageProps = {
   variant?: AppointmentConfirmedVariant
+  onLogoHome?: () => void
+  onReviewHandoffNavigate?: (destination: AppointmentReviewHandoffDestination) => void
 }
 
 export function AppointmentConfirmedPage({
   variant = 'appointmentConfirmed',
+  onLogoHome,
+  onReviewHandoffNavigate,
 }: AppointmentConfirmedPageProps = {}) {
-  const navigate = useNavigate()
   const [rating, setRating] = useState(0)
   const [starHover, setStarHover] = useState<number | null>(null)
   const [quality, setQuality] = useState<'up' | 'down' | null>(null)
@@ -100,11 +109,12 @@ export function AppointmentConfirmedPage({
   const lowReviewFollowUpBooked = isSessionCompleteFollowUpBooked && isLowRatingTrack
   const fiveStarFollowUpBooked = isSessionCompleteFollowUpBooked && rating === 5
   const submitNavigatesToNextPage = lowReviewFollowUpBooked || fiveStarFollowUpBooked
-  const submitTransitionTargetPath = lowReviewFollowUpBooked
-    ? '/provider-recommendations'
-    : fiveStarFollowUpBooked
-      ? '/follow-up-booked-high-feedback'
-      : null
+  const submitReviewHandoffTarget: AppointmentReviewHandoffDestination | null =
+    lowReviewFollowUpBooked
+      ? 'providerRecommendations'
+      : fiveStarFollowUpBooked
+        ? 'fiveStarThankYou'
+        : null
   const showSubmitTransitionOverlay = submitPhase === 'transitioning' && submitNavigatesToNextPage
 
   useEffect(() => {
@@ -224,11 +234,12 @@ export function AppointmentConfirmedPage({
 
   useEffect(() => {
     if (submitPhase !== 'transitioning') return
-    if (!submitTransitionTargetPath) return
+    if (!submitReviewHandoffTarget) return
 
     submitTransitionTimerRef.current = window.setTimeout(() => {
       submitTransitionTimerRef.current = null
-      navigate(submitTransitionTargetPath)
+      captureSessionPageHeightForHandoff()
+      onReviewHandoffNavigate?.(submitReviewHandoffTarget)
     }, SUBMIT_TRANSITION_HOLD_MS)
 
     return () => {
@@ -237,7 +248,7 @@ export function AppointmentConfirmedPage({
         submitTransitionTimerRef.current = null
       }
     }
-  }, [submitPhase, submitTransitionTargetPath, navigate])
+  }, [submitPhase, submitReviewHandoffTarget, onReviewHandoffNavigate])
 
   useEffect(() => {
     return () => {
@@ -352,16 +363,17 @@ export function AppointmentConfirmedPage({
     >
       <div className={styles.shell}>
         <nav aria-label="Site" className={styles.nav}>
-          <Link
-            to="/"
+          <button
+            type="button"
             className={[
               styles.logoLink,
               showSubmitTransitionOverlay ? styles.logoLinkHiddenDuringOverlay : '',
             ]
               .filter(Boolean)
               .join(' ')}
+            onClick={() => onLogoHome?.()}
+            aria-label="Grow Therapy home"
           >
-            <span className={styles.visuallyHidden}>Grow Therapy home</span>
             <img
               className={styles.logo}
               src={`${import.meta.env.BASE_URL}assets/grow-logo.svg`}
@@ -369,7 +381,7 @@ export function AppointmentConfirmedPage({
               height={32}
               alt=""
             />
-          </Link>
+          </button>
         </nav>
 
         <main className={styles.main}>
@@ -411,9 +423,14 @@ export function AppointmentConfirmedPage({
                   Message your provider, cancel &amp; reschedule appointments, manage billing and more
                 </p>
 
-                <Link className={styles.portalCta} to="#" data-confirm-reveal>
+                <button
+                  type="button"
+                  className={styles.portalCta}
+                  data-confirm-reveal
+                  data-prototype-placeholder
+                >
                   Go to your portal
-                </Link>
+                </button>
               </div>
             </div>
 

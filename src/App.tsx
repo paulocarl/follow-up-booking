@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { BrowserRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { AppointmentConfirmedPage } from './AppointmentConfirmedPage'
 import { FiveStarFeedbackThankYouPage } from './FiveStarFeedbackThankYouPage'
 import { ProviderRecommendationsPage } from './ProviderRecommendationsPage'
@@ -12,24 +12,38 @@ const routerBasename =
   import.meta.env.BASE_URL === '/' ? undefined : import.meta.env.BASE_URL.replace(/\/$/, '')
 
 type FollowUpDemoMode = 'noFollowUp' | 'alreadyBooked'
+
+export type PrototypeScreen =
+  | 'home'
+  | 'appointmentConfirmed'
+  | 'providerRecommendations'
+  | 'fiveStarThankYou'
+
 const PROTOTYPE_TOAST_MS = 2500
 
-function ScrollToTopOnRouteChange() {
-  const { pathname } = useLocation()
-
+function ScrollToTopOnScreenChange({ screen }: { screen: PrototypeScreen }) {
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
-  }, [pathname])
+  }, [screen])
 
   return null
 }
 
-function AppRoutes() {
-  const navigate = useNavigate()
+function PrototypeApp() {
   const [sessionKey, setSessionKey] = useState(0)
   const [followUpDemo, setFollowUpDemo] = useState<FollowUpDemoMode>('noFollowUp')
+  const [screen, setScreen] = useState<PrototypeScreen>('home')
   const [showPrototypeToast, setShowPrototypeToast] = useState(false)
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const goHome = useCallback(() => setScreen('home'), [])
+
+  const reviewHandoffNavigate = useCallback(
+    (destination: Exclude<PrototypeScreen, 'home' | 'appointmentConfirmed'>) => {
+      setScreen(destination)
+    },
+    [],
+  )
 
   const triggerPrototypeToast = useCallback(() => {
     if (toastTimerRef.current != null) {
@@ -48,6 +62,16 @@ function AppRoutes() {
       if (event.defaultPrevented) return
       const target = event.target
       if (!(target instanceof Element)) return
+
+      const placeholderInteractive = target.closest('[data-prototype-placeholder]')
+      if (
+        placeholderInteractive instanceof HTMLButtonElement ||
+        placeholderInteractive instanceof HTMLAnchorElement
+      ) {
+        event.preventDefault()
+        triggerPrototypeToast()
+        return
+      }
 
       const anchor = target.closest('a')
       if (!anchor) return
@@ -76,22 +100,27 @@ function AppRoutes() {
   const resetPrototype = () => {
     clearHandoffPageMinHeight()
     setSessionKey((k) => k + 1)
-    navigate('/', { replace: true })
+    setScreen('home')
   }
 
   const homePage =
     followUpDemo === 'noFollowUp' ? (
-      <SessionCompletePage key={`${sessionKey}-session`} />
+      <SessionCompletePage
+        key={`${sessionKey}-session`}
+        onBookSessionComplete={() => setScreen('appointmentConfirmed')}
+      />
     ) : (
       <AppointmentConfirmedPage
         key={`${sessionKey}-followup-booked`}
         variant="sessionCompleteFollowUpBooked"
+        onLogoHome={goHome}
+        onReviewHandoffNavigate={reviewHandoffNavigate}
       />
     )
 
   return (
     <>
-      <ScrollToTopOnRouteChange />
+      <ScrollToTopOnScreenChange screen={screen} />
       <div className={styles.prototypeBar}>
         <button
           type="button"
@@ -118,7 +147,7 @@ function AppRoutes() {
             aria-checked={followUpDemo === 'noFollowUp'}
             onClick={() => {
               setFollowUpDemo('noFollowUp')
-              navigate('/', { replace: true })
+              setScreen('home')
             }}
           >
             No follow up
@@ -136,11 +165,10 @@ function AppRoutes() {
             aria-label="Follow up booked"
             onClick={() => {
               if (followUpDemo === 'noFollowUp') {
-                // Keep / "F.u booked" home screen content height aligned to current no-follow-up page.
                 captureSessionPageHeightForHandoff()
               }
               setFollowUpDemo('alreadyBooked')
-              navigate('/', { replace: true })
+              setScreen('home')
             }}
           >
             F.u booked
@@ -148,21 +176,21 @@ function AppRoutes() {
         </div>
       </div>
       <div className={styles.routeHost}>
-        <Routes>
-          <Route path="/" element={homePage} />
-          <Route
-            path="/appointment-confirmed"
-            element={<AppointmentConfirmedPage key={`appt-${sessionKey}`} />}
+        {screen === 'home' ? homePage : null}
+        {screen === 'appointmentConfirmed' ? (
+          <AppointmentConfirmedPage
+            key={`appt-${sessionKey}`}
+            variant="appointmentConfirmed"
+            onLogoHome={goHome}
+            onReviewHandoffNavigate={reviewHandoffNavigate}
           />
-          <Route
-            path="/provider-recommendations"
-            element={<ProviderRecommendationsPage key={`rec-${sessionKey}`} />}
-          />
-          <Route
-            path="/follow-up-booked-high-feedback"
-            element={<FiveStarFeedbackThankYouPage key={`5star-${sessionKey}`} />}
-          />
-        </Routes>
+        ) : null}
+        {screen === 'providerRecommendations' ? (
+          <ProviderRecommendationsPage key={`rec-${sessionKey}`} onLogoHome={goHome} />
+        ) : null}
+        {screen === 'fiveStarThankYou' ? (
+          <FiveStarFeedbackThankYouPage key={`5star-${sessionKey}`} onLogoHome={goHome} />
+        ) : null}
       </div>
       {showPrototypeToast ? (
         <div className={styles.prototypeToast} role="status" aria-live="polite">
@@ -176,9 +204,9 @@ function AppRoutes() {
 export default function App() {
   return (
     <BrowserRouter basename={routerBasename}>
-      <div className={styles.appFrame}>
-        <AppRoutes />
-      </div>
+      <Routes>
+        <Route path="*" element={<PrototypeApp />} />
+      </Routes>
     </BrowserRouter>
   )
 }

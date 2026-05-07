@@ -1,6 +1,5 @@
 import gsap from 'gsap'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { SiteFooter } from './SiteFooter'
 import { captureSessionPageHeightForHandoff } from './sessionPageHandoff'
 import styles from './SessionCompletePage.module.css'
@@ -79,8 +78,11 @@ function prefersReducedMotion(): boolean {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
-export function SessionCompletePage() {
-  const navigate = useNavigate()
+type SessionCompletePageProps = {
+  onBookSessionComplete: () => void
+}
+
+export function SessionCompletePage({ onBookSessionComplete }: SessionCompletePageProps) {
   const bookingOverlayRef = useRef<HTMLDivElement>(null)
   const navLogoRef = useRef<HTMLDivElement>(null)
 
@@ -151,7 +153,7 @@ export function SessionCompletePage() {
       if (logoEl) gsap.set(logoEl, { autoAlpha: 0 })
       await new Promise((r) => setTimeout(r, 420))
       captureSessionPageHeightForHandoff()
-      navigate('/appointment-confirmed')
+      onBookSessionComplete()
       return
     }
 
@@ -177,8 +179,8 @@ export function SessionCompletePage() {
 
     await new Promise((r) => setTimeout(r, BOOKING_DELAY_MS))
     captureSessionPageHeightForHandoff()
-    navigate('/appointment-confirmed')
-  }, [isBooking, navigate])
+    onBookSessionComplete()
+  }, [isBooking, onBookSessionComplete])
 
   return (
     <div className={styles.page}>
