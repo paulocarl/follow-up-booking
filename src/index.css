@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+@import './season-fonts.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  /*
+    Typography tokens from Figma 1228-95496 (Season variable / Seasons Sans styles).
+    Fallback: Inter (FontAwesome remains for icons).
+  */
+  --font-sans-season: 'Season Sans VF', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-serif-season: 'Season Serif VF', Georgia, 'Times New Roman', serif;
+
+  /*
+    Hero display: Season variable serif (matches Figma serif style on this screen).
+    Weights: ~490 desktop, ~570 mobile (same as sans display tokens).
+  */
+  --font-display: var(--font-serif-season);
+
+  /* Body / UI — Season Sans VF */
+  --font-sans: var(--font-sans-season);
+
+  /* Figma-aligned variable weights */
+  --w-regular: 400;
+  --w-display-desktop: 490;
+  --w-strong: 550;
+  --w-display-mobile: 570;
+
+  --color-surface: #ffffff;
+  --color-surface-hover: #f9f8f6;
+  --color-surface-inactive: #fcfbfb;
+  --color-text-default: #2c2b2a;
+  --color-text-strong: #010204;
+  --color-action-link: #010204;
+  --color-text-muted: #696864;
+  --color-text-soft: #5f5f60;
+  --color-text-support: #353535;
+  --color-neutral-900: #05090d;
+  --color-border: #e3dfd7;
+  --color-border-subtle: #e6e2de;
+  /* Dividers on emphasis surfaces (e.g. feedback nest 1300:20526) */
+  --color-border-divider: #817f7d;
+  /* Form checkbox (Figma 1250:5568) */
+  --color-checkbox-border: #97948e;
+  /* Tag selector selected (Figma 1250:5521 Button - Selector) */
+  --color-tag-selected-surface: #f1efec;
+  --color-tag-selected-border: #4a412d;
+  --color-border-selected: #2e291e;
+  --color-icon: #2c2b2a;
+  --color-brand-fill-desktop: #4c1d44;
+  --color-brand-border-desktop: #4c1d44;
+  --color-brand-fill-mobile: #4c314a;
+  --color-brand-border-mobile: #4c314a;
+  --tracking-tight: -1px;
+  --space-page-inline-mobile: 24px;
+  --space-page-inline-desktop: 36px;
+  --space-section-y-mobile: 24px;
+  --space-section-y-desktop: 64px;
+  --gutter-desktop: clamp(72px, 10vw, 128px);
+  --booking-stack-gap-desktop: 24px;
+
+  /* Site footer (Figma inverse footer 1298:20435) */
+  --color-footer-bg: #010204;
+  --color-footer-text: #ffffff;
+  --color-footer-text-muted: #c6c7c7;
+  --space-footer-stack-gap: 64px;
+  --space-footer-pad-y-mobile: 32px;
+  --space-footer-pad-y-tablet: 32px;
+  --space-footer-pad-y-desktop: 48px;
+  /* Air between session-complete main column and inverse marketing footer */
+  --space-main-to-footer: clamp(68px, 12.1vw, 169px);
+
+  /* Session complete + appointment confirmed: fill viewport above footer the same way */
+  --page-min-height: 100vh;
+  --page-min-height: 100svh;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: var(--page-min-height);
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  color: var(--color-text-strong);
+  font-family: var(--font-sans);
+  font-weight: var(--w-regular);
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  width: 100%;
+}

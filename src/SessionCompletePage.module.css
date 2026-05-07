@@ -1,0 +1,999 @@
+/* Two-column layout, desktop date strip & shell padding-desktop from 768px (below = stacked/mobile). */
+
+.page {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  color: var(--color-text-default);
+  font-family: var(--font-sans);
+}
+
+/* Single horizontal rhythm: matches Figma nav + content padding (24 mobile / 36 desktop) */
+.shell {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding-inline: var(--space-page-inline-mobile);
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .shell {
+    padding-inline: var(--space-page-inline-desktop);
+  }
+}
+
+.main {
+  position: relative;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  min-height: 0;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-surface);
+  padding-block: 12px;
+}
+
+@media (min-width: 768px) {
+  .nav {
+    /* at least 12px above logo (Figma nav rhythm) */
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+}
+
+.logoWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  width: 63px;
+  height: 32px;
+  transform: scaleY(-1);
+  display: block;
+}
+
+/* Mobile: stacked. Desktop: two equal columns, top-aligned (Figma “Professional Card” row). */
+.layout {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 38px;
+  padding-block: var(--space-section-y-mobile) 48px;
+  min-height: 0;
+}
+
+@media (max-width: 767px) {
+  .layout {
+    /* Extra air between Grow logo bar and page header (title) */
+    padding-block-start: 40px;
+  }
+}
+
+@media (min-width: 768px) {
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: var(--gutter-desktop);
+    align-items: start;
+    padding-block: var(--space-section-y-desktop) 96px;
+    gap: 0;
+  }
+}
+
+.leftStack {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: left;
+  max-width: 649px;
+  margin-inline: 0;
+}
+
+@media (min-width: 768px) {
+  .leftStack {
+    text-align: left;
+    margin-inline: 0;
+    gap: 24px;
+    max-width: 649px;
+    justify-self: start;
+  }
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .hero {
+    align-items: flex-start;
+    gap: 20px;
+  }
+}
+
+.display {
+  font-family: var(--font-display);
+  /* typography/display/mobile/default */
+  font-weight: var(--w-display-mobile);
+  font-size: 48px;
+  line-height: 50px;
+  letter-spacing: 0;
+  color: var(--color-text-strong);
+  margin: 0;
+  text-rendering: optimizeLegibility;
+}
+
+@media (min-width: 768px) {
+  .display {
+    /* typography/display/default — Season Sans Regular ~490 */
+    font-weight: var(--w-display-desktop);
+    font-size: 64px;
+    line-height: 64px;
+    letter-spacing: var(--tracking-tight);
+  }
+}
+
+.rejoinRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+  justify-content: flex-start;
+}
+
+.mutedSmall {
+  /* typography/label/default */
+  font-weight: var(--w-regular);
+  font-size: 14px;
+  line-height: 14px;
+  letter-spacing: 0;
+  color: var(--color-text-muted);
+}
+
+@media (min-width: 768px) {
+  .mutedSmall {
+    font-size: 16px;
+    line-height: 16px;
+  }
+}
+
+/* One step smaller than .mutedSmall (timezone footnote) */
+.mutedSmaller {
+  font-weight: var(--w-regular);
+  font-size: 14px;
+  line-height: 17px;
+  letter-spacing: 0;
+  color: var(--color-text-muted);
+}
+
+.rejoinLink {
+  font-family: var(--font-sans);
+  font-weight: var(--w-strong);
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0;
+  color: var(--color-action-link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+@media (min-width: 768px) {
+  .rejoinLink {
+    font-size: 16px;
+    line-height: 16px;
+  }
+}
+
+.intro {
+  margin: 0;
+  padding: 0;
+  /* typography/body/default */
+  font-weight: var(--w-regular);
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: 0;
+  text-align: left;
+  width: 100%;
+  max-width: 520px;
+  margin-inline: 0;
+  color: var(--color-text-strong);
+}
+
+@media (min-width: 768px) {
+  .intro {
+    margin: 0;
+    text-align: left;
+    margin-inline: 0;
+    max-width: 56ch;
+    font-size: 16px;
+    line-height: 28px;
+    color: var(--color-text-default);
+    font-weight: var(--w-regular);
+  }
+}
+
+/* Right column: left-align all blocks; widths follow Figma inner (~583 booking). */
+.booking {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  gap: 24px;
+  padding: 0;
+}
+
+@media (min-width: 768px) {
+  .booking {
+    gap: var(--booking-stack-gap-desktop);
+    align-items: flex-start;
+    justify-self: start;
+    max-width: 648px;
+    width: 100%;
+  }
+}
+
+.bookingInner {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .bookingInner {
+    max-width: 583px;
+    margin-inline: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .bookingInner {
+    max-width: 100%;
+  }
+}
+
+.dayPickerHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+@media (min-width: 768px) {
+  .dayPickerHeader {
+    gap: 0;
+    margin-bottom: 12px;
+    width: 100%;
+    max-width: 583px;
+  }
+}
+
+.dayPickerMobileTitle {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-weight: var(--w-strong);
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: 0;
+  color: var(--color-text-strong);
+}
+
+@media (min-width: 768px) {
+  .dayPickerMobileTitle {
+    display: none;
+  }
+}
+
+.dayPickerDesktopRow {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .dayPickerDesktopRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 16px;
+    width: 100%;
+  }
+}
+
+.dayPickerGrow {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  /* typography/subhead/sans/small */
+  font-weight: var(--w-strong);
+  font-size: 20px;
+  line-height: 24px;
+  color: var(--color-text-strong);
+}
+
+.carousel {
+  display: flex;
+  align-items: center;
+  gap: 4.2px;
+}
+
+@media (min-width: 768px) {
+  .carousel {
+    flex-shrink: 0;
+    margin-inline-start: auto;
+  }
+}
+
+.iconButton {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-icon);
+  cursor: pointer;
+}
+
+.iconButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--color-surface-inactive);
+}
+
+.iconButton:focus-visible {
+  outline: 2px solid var(--color-border-selected);
+  outline-offset: 2px;
+}
+
+.faIcon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.dateStripWrapMobile {
+  width: 100%;
+}
+
+@media (max-width: 767px) {
+  .dateStripWrapMobile {
+    /*
+      Full viewport-width scroll rail: margin-only bleed fails when flex/grid
+      clamps child width; breakout from the padded column reliably.
+      50% = half of booking column width → aligns box to viewport 0..
+    */
+    width: 100vw;
+    max-width: none;
+    margin-inline: 0;
+    margin-left: calc(50% - 50vw);
+    /* …align scroll padding with titled column on the left; cards can reach screen edge on the right */
+    padding-inline-start: var(--space-page-inline-mobile);
+    padding-inline-end: 0;
+    overflow-x: auto;
+    overflow-y: visible;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+    /*
+      Touch: native overflow-x pan (pan-y would block horizontal UX on the cards).
+      Mouse: optional drag via JS (see DatesMobile) for empty-rail / coarse affordance.
+    */
+    touch-action: pan-x pan-y;
+    overscroll-behavior-x: contain;
+    /* Tighter to heading on top; keep bottom space for outlines */
+    padding-block: 6px 12px;
+  }
+
+  /*
+    First card aligns with day title: wrap already uses page inline padding;
+    avoid stacking an extra inset here (was 8px — read as “extra” left gap vs heading).
+  */
+  .dateStripWrapMobile .dateStrip {
+    padding-inline-start: 0;
+    padding-inline-end: 0;
+    padding-block: 4px;
+  }
+
+  .dateStripWrapMobile :is(.dateStrip, li, button) {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .dateStripWrapMobile::-webkit-scrollbar {
+    display: none;
+    height: 0;
+    width: 0;
+  }
+}
+
+/* Mouse-drag on narrow viewports; touch uses native overflow-x pan — see DatesMobile */
+@media (max-width: 767px) and (pointer: fine) {
+  .dateStripWrapMobile {
+    cursor: grab;
+  }
+
+  .dateStripWrapGrabbing {
+    cursor: grabbing;
+  }
+}
+
+.dateStripWrapGrabbing {
+  user-select: none;
+  touch-action: none;
+}
+
+.dateStripWrapGrabbing :is(.dateStrip, li, button) {
+  touch-action: none;
+}
+
+@media (min-width: 768px) {
+  .dateStripWrapMobile {
+    display: none;
+  }
+}
+
+.dateStripWrapDesktop {
+  display: none;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .dateStripWrapDesktop {
+    display: block;
+    overflow: visible;
+    max-width: 583px;
+  }
+}
+
+.dateStrip {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 12px;
+  width: max-content;
+}
+
+@media (min-width: 768px) {
+  .dateStrip {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 583px;
+    gap: 6px;
+    min-width: 0;
+  }
+}
+
+.dateCard:focus-visible {
+  outline: 2px solid var(--color-border-selected);
+  outline-offset: 2px;
+}
+
+.dateCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  padding-block: 10px;
+  padding-inline: 12px;
+  flex: 0 0 auto;
+  width: 90px;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .dateCard {
+    flex: 0 0 88px;
+    width: 88px;
+    padding: 16px;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 767px) {
+  .dateCard {
+    gap: 6px;
+    padding-block: 12px;
+  }
+}
+
+/* Same selected border desktop + mobile */
+.dateCardSelected {
+  border-color: var(--color-border-selected);
+}
+
+.lineWeekday {
+  /* typography/label/small */
+  font-weight: var(--w-regular);
+  font-size: 14px;
+  line-height: 14px;
+  color: var(--color-neutral-900);
+}
+
+.lineDate {
+  /* typography/label/emphasis/small */
+  font-weight: var(--w-strong);
+  font-size: 14px;
+  line-height: 14px;
+  color: var(--color-neutral-900);
+}
+
+.timesBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  align-items: flex-start;
+}
+
+@media (min-width: 768px) {
+  .timesBlock {
+    max-width: 583px;
+    gap: 16px;
+  }
+}
+
+/* Figma 1228:95596 — heading + EDT note on one row (start / end). */
+.timesHeadingRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+}
+
+.timesHeadingNote {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: right;
+}
+
+.timesTitle {
+  margin: 0;
+  flex-shrink: 0;
+  font-family: var(--font-sans);
+  font-weight: var(--w-strong);
+  font-size: 18px;
+  line-height: 22px;
+  color: var(--color-text-default);
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .timesTitle {
+    /* subhead/sans/small */
+    font-size: 20px;
+    line-height: 24px;
+  }
+}
+
+.timeSectionMobile {
+  display: block;
+  width: 100%;
+}
+
+.timeSectionDesktop {
+  display: none;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .timeSectionMobile {
+    display: none;
+  }
+
+  .timeSectionDesktop {
+    display: block;
+  }
+}
+
+.timeGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+}
+
+.timeSlot {
+  box-sizing: border-box;
+  width: 86px;
+  flex: 0 0 86px;
+  min-width: 86px;
+  max-width: 86px;
+  padding: 12px 8px;
+  border-radius: 16px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  font-family: inherit;
+  /* typography/label/emphasis/small */
+  font-weight: var(--w-strong);
+  font-size: 14px;
+  line-height: 14px;
+  color: var(--color-text-strong);
+  cursor: pointer;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.timeSlot:focus-visible {
+  outline: 2px solid var(--color-border-selected);
+  outline-offset: 2px;
+}
+
+.timeSlotSelected {
+  border-color: var(--color-border-selected);
+}
+
+@media (min-width: 768px) {
+  .timeGrid {
+    flex-wrap: nowrap;
+    align-self: stretch;
+    width: 100%;
+    max-width: 583px;
+  }
+}
+
+.actions {
+  width: 100%;
+  max-width: 585px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: stretch;
+}
+
+@media (min-width: 768px) {
+  .actions {
+    margin-inline: 0;
+    align-items: flex-start;
+  }
+}
+
+.primaryCta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 999px;
+  border: 1px solid var(--color-brand-border-mobile);
+  background: var(--color-brand-fill-mobile);
+  color: white;
+  text-decoration: none;
+  padding: 22px 28px;
+  font-weight: var(--w-strong);
+  font-size: 16px;
+  line-height: 16px;
+  letter-spacing: 0;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.primaryCtaBusy {
+  gap: 10px;
+  cursor: wait;
+}
+
+.primaryCtaSpinner {
+  flex-shrink: 0;
+  display: block;
+  box-sizing: border-box;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, white 32%, transparent);
+  border-top-color: white;
+  transform-origin: 50% 50%;
+  animation: bookingButtonSpin 1.15s linear infinite;
+}
+
+.primaryCtaBusyLabel {
+  letter-spacing: 0;
+}
+
+.primaryCta:disabled {
+  opacity: 0.94;
+  cursor: wait;
+}
+
+.primaryCta:focus-visible {
+  outline: 2px solid var(--color-border-selected);
+  outline-offset: 3px;
+}
+
+@media (min-width: 768px) {
+  .primaryCta {
+    width: auto;
+    min-width: 200px;
+    max-width: 100%;
+    padding: 18px 20px;
+    border-color: var(--color-brand-border-desktop);
+    background: var(--color-brand-fill-desktop);
+  }
+
+  .primaryCtaSpinner {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@keyframes bookingButtonSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .primaryCtaSpinner {
+    animation: none;
+    border-color: color-mix(in srgb, white 40%, transparent);
+    border-top-color: white;
+    transform: rotate(35deg);
+  }
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.bookingLocked {
+  pointer-events: none;
+}
+
+/*
+ * White handoff while “booking”: scoped to <main> only.
+ * Top nav + SiteFooter stay visible; logo + dots center in the main content box.
+ * (Prototype Reset stays above at z-index 1000.)
+ */
+.bookingOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-surface);
+  pointer-events: auto;
+  /* Avoid one frame of solid white before GSAP runs */
+  opacity: 0;
+  visibility: hidden;
+}
+
+.bookingOverlayPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+}
+
+.bookingOverlayLogo {
+  display: block;
+  width: 78px;
+  height: auto;
+  transform: scaleY(-1);
+}
+
+.bookingOverlayDots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.bookingOverlayDot {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-text-strong);
+  animation: bookingDotPulse 1.05s ease-in-out infinite;
+}
+
+.bookingOverlayDot:nth-child(2) {
+  animation-delay: 0.16s;
+}
+
+.bookingOverlayDot:nth-child(3) {
+  animation-delay: 0.32s;
+}
+
+@keyframes bookingDotPulse {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.3;
+  }
+
+  50% {
+    transform: translateY(-7px);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bookingOverlayDot {
+    animation: none;
+    opacity: 0.55;
+  }
+}
+
+/* Footer stack: Figma 1228:95613 “Browse providers” promo, then rejoin row */
+
+.browseProvidersAction {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+}
+
+.browseProvidersCopy {
+  flex: 1 1 240px;
+  min-width: 0;
+  max-width: calc(362px * 1.1);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+@media (max-width: 767px) {
+  /* Don’t flex-grow along column axis — avoids a tall empty gap above the CTA */
+  .browseProvidersCopy {
+    flex: 0 0 auto;
+    max-width: none;
+  }
+}
+
+/* typography/label/emphasis/default — “Browse other providers” */
+.browseProvidersTitle {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-weight: var(--w-strong);
+  font-size: 16px;
+  line-height: 16px;
+  letter-spacing: 0;
+  color: var(--color-text-strong);
+}
+
+.browseProvidersBody {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-weight: var(--w-regular);
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: 0;
+  color: var(--color-text-soft);
+}
+
+@media (min-width: 768px) {
+  .browseProvidersTitle {
+    font-size: 18px;
+    line-height: 22px;
+  }
+
+  .browseProvidersBody {
+    font-size: 16px;
+    line-height: 22px;
+  }
+}
+
+/* Secondary/outline — Figma Button Secondary ~size 125, hug width */
+.browseProvidersCta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  min-height: 40px;
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: 1px solid var(--color-text-strong);
+  background: var(--color-surface);
+  font-family: var(--font-sans);
+  font-weight: var(--w-regular);
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0;
+  color: var(--color-text-strong);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .browseProvidersCta {
+    font-size: 16px;
+    line-height: 16px;
+    min-height: 44px;
+    padding: 12px 22px;
+  }
+}
+
+@media (max-width: 767px) {
+  .browseProvidersAction {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 12px;
+  }
+
+  /* Hug label width only — never stretch to full bleed */
+  .browseProvidersCta {
+    width: auto;
+    max-width: none;
+    align-self: flex-start;
+  }
+}
+
+.browseProvidersCta:focus-visible {
+  outline: 2px solid var(--color-border-selected);
+  outline-offset: 2px;
+}
+
+.rejoinFooterBlock {
+  padding-top: 24px;
+  margin-top: 24px;
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+@media (min-width: 768px) {
+  .rejoinFooterBlock {
+    padding-top: 28px;
+    margin-top: 28px;
+  }
+}
+
+.bookingFooter {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 583px;
+  padding-top: 24px;
+  margin-top: 4px;
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+@media (min-width: 768px) {
+  .bookingFooter {
+    padding-top: 28px;
+  }
+}

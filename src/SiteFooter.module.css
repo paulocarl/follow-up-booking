@@ -1,0 +1,281 @@
+/* Figma 1298:20435 — responsive marketing footer (inverse surface). */
+
+.siteFooter {
+  flex-shrink: 0;
+  width: 100%;
+  margin-top: var(--space-main-to-footer);
+  background: var(--color-footer-bg);
+  color: var(--color-footer-text);
+  font-family: var(--font-sans);
+}
+
+.siteFooterInner {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: var(--space-footer-pad-y-mobile) var(--space-page-inline-mobile);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-footer-stack-gap);
+}
+
+@media (min-width: 768px) {
+  .siteFooterInner {
+    padding: var(--space-footer-pad-y-tablet) var(--space-page-inline-desktop);
+  }
+}
+
+@media (min-width: 1024px) {
+  .siteFooterInner {
+    padding: var(--space-footer-pad-y-desktop) var(--space-page-inline-desktop);
+  }
+}
+
+/* Main nav column + states/policy column (policies align with first state col) */
+.footerBody {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .footerBody {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    gap: 32px;
+  }
+}
+
+.mainNav {
+  flex-shrink: 0;
+  box-sizing: border-box;
+  /* Extra space before state grid (Figma ~156px cap on wide) */
+  padding-inline-end: clamp(28px, 7vw, 156px);
+}
+
+/* States + legal + fine print share one track (Figma: policy under states, not under Home) */
+.footerBodyMain {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 48px;
+}
+
+.mainNavList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.mainNavLink {
+  font-weight: var(--w-regular);
+  font-size: 24px;
+  line-height: 29px;
+  letter-spacing: 0;
+  color: var(--color-footer-text);
+  text-decoration: none;
+}
+
+.mainNavLink:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.mainNavLink:focus-visible {
+  outline: 2px solid var(--color-footer-text);
+  outline-offset: 3px;
+}
+
+.stateGrid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 16px;
+  row-gap: 0;
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .stateGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: 24px;
+  }
+}
+
+.stateColumn {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stateLink {
+  font-weight: var(--w-regular);
+  font-size: 14px;
+  line-height: 14px;
+  letter-spacing: 0;
+  color: var(--color-footer-text);
+  text-decoration: none;
+  display: inline-block;
+}
+
+.stateLink:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.stateLink:focus-visible {
+  outline: 2px solid var(--color-footer-text);
+  outline-offset: 2px;
+}
+
+.policyBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  width: 100%;
+  max-width: 100%;
+}
+
+.policyGrid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+/* Medium: 2 cols × 4 rows, fill columns first (matches Figma 800) */
+@media (min-width: 600px) and (max-width: 1023px) {
+  .policyGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(4, auto);
+    grid-auto-flow: column;
+    column-gap: 24px;
+    row-gap: 12px;
+  }
+}
+
+/* Large: 4 cols × 2 rows, column-major (matches Figma 1440) */
+@media (min-width: 1024px) {
+  .policyGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: repeat(2, auto);
+    grid-auto-flow: column;
+    column-gap: 24px;
+    row-gap: 12px;
+  }
+}
+
+.policyLink {
+  font-weight: var(--w-regular);
+  font-size: 12px;
+  line-height: 12px;
+  letter-spacing: 0;
+  color: var(--color-footer-text-muted);
+  text-decoration: none;
+}
+
+.policyLink:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.policyLink:focus-visible {
+  outline: 2px solid var(--color-footer-text-muted);
+  outline-offset: 2px;
+}
+
+.finePrint {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.crisisCopy {
+  margin: 0;
+  font-weight: var(--w-regular);
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 0;
+  color: var(--color-footer-text-muted);
+  max-width: 72rem;
+}
+
+.inlineLink {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.inlineLink:focus-visible {
+  outline: 2px solid var(--color-footer-text-muted);
+  outline-offset: 2px;
+}
+
+.copyrightRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 12px;
+  align-items: flex-start;
+}
+
+.copyrightItem {
+  font-weight: var(--w-regular);
+  font-size: 12px;
+  line-height: 12px;
+  letter-spacing: 0;
+  color: var(--color-footer-text-muted);
+  white-space: nowrap;
+}
+
+@media (max-width: 599px) {
+  .copyrightItem {
+    white-space: normal;
+  }
+}
+
+.wordmarkWrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/*
+  Flip on a wrapper so the <img> keeps a correct 63:32 box (scaleY on the img was
+  interacting with replaced-element sizing and looked vertically squished).
+*/
+.wordmarkFlip {
+  width: 100%;
+  max-width: 100%;
+  transform: scaleY(-1);
+}
+
+.wordmark {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 63 / 32;
+  display: block;
+  filter: brightness(0) invert(1);
+}
+
+.wordmark:focus-visible {
+  outline: 2px solid var(--color-footer-text);
+  outline-offset: 4px;
+}

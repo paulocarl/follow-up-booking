@@ -1,0 +1,23 @@
+/*
+  Season collection (Season/): variable sans + serif from project `/Season/` folder.
+*/
+@font-face {
+  font-family: 'Season Sans VF';
+  src:
+    url('../Season/SeasonSansVF.woff2') format('woff2'),
+    url('../Season/SeasonSansVF.woff') format('woff');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Display serif (Figma: “Your session is complete”) */
+@font-face {
+  font-family: 'Season Serif VF';
+  src:
+    url('../Season/SeasonSerifVF.woff2') format('woff2'),
+    url('../Season/SeasonSerifVF.woff') format('woff');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
