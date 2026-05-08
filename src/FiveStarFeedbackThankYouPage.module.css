@@ -282,6 +282,13 @@ button.logoLink {
   color: var(--color-text-soft);
 }
 
+button.btnPrimary,
+button.btnSecondary {
+  appearance: none;
+  margin: 0;
+  font: inherit;
+}
+
 .btnPrimary {
   display: inline-flex;
   align-items: center;

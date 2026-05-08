@@ -1,0 +1,123 @@
+/* Guided post-session (Figma 1380:8675) + unsure path (1380:8740) — reuse session shell tokens */
+
+/* Extra invisible air below main columns in guided demos (prototype breathing room) */
+.guidedMainBottomPad {
+  padding-bottom: 100px;
+}
+
+.guidedLeftColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: left;
+  max-width: 649px;
+}
+
+@media (min-width: 768px) {
+  .guidedLeftColumn {
+    justify-self: start;
+  }
+}
+
+.guidedChoices {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 16px;
+  width: 100%;
+  min-width: 0;
+}
+
+.guidedOptionStack {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 16px;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .guidedChoices {
+    justify-self: start;
+    max-width: 648px;
+  }
+}
+
+.guidedQuestion {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-weight: var(--w-regular);
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: 0;
+  color: var(--color-text-strong);
+}
+
+@media (min-width: 768px) {
+  .guidedQuestion {
+    font-size: 20px;
+    line-height: 20px;
+  }
+}
+
+.guidedOption {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 0;
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid var(--color-checkbox-border);
+  background: var(--color-surface);
+  font-family: var(--font-sans);
+  font-weight: var(--w-regular);
+  font-size: 16px;
+  line-height: 26px;
+  letter-spacing: 0;
+  color: var(--color-text-default);
+  text-align: left;
+  cursor: pointer;
+}
+
+.guidedOption:hover {
+  background: var(--color-surface-hover);
+}
+
+.guidedOption:focus-visible {
+  outline: 2px solid var(--color-border-selected);
+  outline-offset: 2px;
+}
+
+/* Narrow display title: “Choose what feels” / “right for now” (+ explicit <br /> in markup) */
+.guidedChooseHeading {
+  width: fit-content;
+  max-width: 100%;
+}
+
+/* “Choose what feels right” stack: title block + supporting line */
+.guidedIntroStack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+  text-align: left;
+  max-width: 649px;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .guidedIntroStack {
+    justify-self: start;
+  }
+}
+
+.guidedIntroLine {
+  margin: 0;
+  max-width: 56ch;
+  font-family: var(--font-sans);
+  font-weight: var(--w-regular);
+  font-size: 16px;
+  line-height: 28px;
+  letter-spacing: 0;
+  color: var(--color-text-soft);
+}

@@ -2,6 +2,9 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import { AppointmentConfirmedPage } from './AppointmentConfirmedPage'
 import { FiveStarFeedbackThankYouPage } from './FiveStarFeedbackThankYouPage'
 import { ProviderRecommendationsPage } from './ProviderRecommendationsPage'
+import { GuidedNotSurePage } from './GuidedNotSurePage'
+import { GuidedTakeTimePage } from './GuidedTakeTimePage'
+import { GuidedPostSessionPage } from './GuidedPostSessionPage'
 import { SessionCompletePage } from './SessionCompletePage'
 import { captureSessionPageHeightForHandoff } from './sessionPageHandoff'
 import { clearHandoffPageMinHeight } from './sessionPageHandoff'
@@ -14,13 +17,16 @@ const LEGACY_ROUTE_TAILS = [
   '/follow-up-booked-high-feedback',
 ] as const
 
-type FollowUpDemoMode = 'noFollowUp' | 'alreadyBooked'
+type FollowUpDemoMode = 'noFollowUp' | 'alreadyBooked' | 'guided'
 
 export type PrototypeScreen =
   | 'home'
   | 'appointmentConfirmed'
   | 'providerRecommendations'
   | 'fiveStarThankYou'
+  | 'guidedFeelGood'
+  | 'guidedNotSure'
+  | 'guidedTakeTime'
 
 const PROTOTYPE_TOAST_MS = 2500
 
@@ -141,12 +147,19 @@ function PrototypeApp() {
         key={`${sessionKey}-session`}
         onBookSessionComplete={() => setScreen('appointmentConfirmed')}
       />
-    ) : (
+    ) : followUpDemo === 'alreadyBooked' ? (
       <AppointmentConfirmedPage
         key={`${sessionKey}-followup-booked`}
         variant="sessionCompleteFollowUpBooked"
         onLogoHome={goHome}
         onReviewHandoffNavigate={reviewHandoffNavigate}
+      />
+    ) : (
+      <GuidedPostSessionPage
+        key={`${sessionKey}-guided-entry`}
+        onFeelGood={() => setScreen('guidedFeelGood')}
+        onNotSure={() => setScreen('guidedNotSure')}
+        onDidNotFeelRight={() => setScreen('providerRecommendations')}
       />
     )
 
@@ -158,7 +171,7 @@ function PrototypeApp() {
           type="button"
           className={styles.reset}
           onClick={resetPrototype}
-          aria-label="Reset to the start of the selected scenario; does not change No follow up yet or F.u booked"
+          aria-label="Reset to the start of the selected scenario; does not change the demo mode toggle"
         >
           Reset
         </button>
@@ -205,6 +218,23 @@ function PrototypeApp() {
           >
             F.u booked
           </button>
+          <button
+            type="button"
+            className={[
+              styles.followUpOption,
+              followUpDemo === 'guided' ? styles.followUpOptionSelected : '',
+            ]
+              .filter(Boolean)
+              .join(' ')}
+            role="radio"
+            aria-checked={followUpDemo === 'guided'}
+            onClick={() => {
+              setFollowUpDemo('guided')
+              setScreen('home')
+            }}
+          >
+            Guided
+          </button>
         </div>
       </div>
       <div className={styles.routeHost}>
@@ -213,6 +243,7 @@ function PrototypeApp() {
           <AppointmentConfirmedPage
             key={`appt-${sessionKey}`}
             variant="appointmentConfirmed"
+            guidedMainBottomPad={followUpDemo === 'guided'}
             onLogoHome={goHome}
             onReviewHandoffNavigate={reviewHandoffNavigate}
           />
@@ -222,6 +253,27 @@ function PrototypeApp() {
         ) : null}
         {screen === 'fiveStarThankYou' ? (
           <FiveStarFeedbackThankYouPage key={`5star-${sessionKey}`} onLogoHome={goHome} />
+        ) : null}
+        {screen === 'guidedFeelGood' ? (
+          <SessionCompletePage
+            key={`${sessionKey}-guided-progress`}
+            heroTitle="Continue your progress"
+            showBrowseProvidersFooter={false}
+            showRejoinWaitingFooter={false}
+            guidedMainBottomPad
+            onBookSessionComplete={() => setScreen('appointmentConfirmed')}
+          />
+        ) : null}
+        {screen === 'guidedNotSure' ? (
+          <GuidedNotSurePage
+            key={`${sessionKey}-guided-unsure`}
+            onAnotherSession={() => setScreen('guidedFeelGood')}
+            onExploreProviders={() => setScreen('providerRecommendations')}
+            onDecideLater={() => setScreen('guidedTakeTime')}
+          />
+        ) : null}
+        {screen === 'guidedTakeTime' ? (
+          <GuidedTakeTimePage key={`${sessionKey}-guided-take-time`} />
         ) : null}
       </div>
       {showPrototypeToast ? (

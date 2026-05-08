@@ -1,0 +1,39 @@
+/* Figma 1380:9160 — Take the time you need + action stack */
+
+/* Desktop-only: first line "Take the time", second line "you need" */
+.breakBeforeYouNeed {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .breakBeforeYouNeed {
+    display: block;
+  }
+}
+
+.introCol {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+  text-align: left;
+  max-width: 649px;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .introCol {
+    justify-self: start;
+  }
+}
+
+.introBody {
+  margin: 0;
+  max-width: 56ch;
+  font-family: var(--font-sans);
+  font-weight: var(--w-regular);
+  font-size: 16px;
+  line-height: 28px;
+  letter-spacing: 0;
+  color: var(--color-text-soft);
+}

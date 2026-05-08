@@ -5,6 +5,7 @@ import {
   captureSessionPageHeightForHandoff,
   readHandoffPageMinHeightPx,
 } from './sessionPageHandoff'
+import guidedStyles from './GuidedFlow.module.css'
 import styles from './AppointmentConfirmedPage.module.css'
 
 const PROVIDER_NAME = 'Anita Rollins'
@@ -60,12 +61,15 @@ type AppointmentConfirmedPageProps = {
   variant?: AppointmentConfirmedVariant
   onLogoHome?: () => void
   onReviewHandoffNavigate?: (destination: AppointmentReviewHandoffDestination) => void
+  /** Guided demo tile only — invisible padding below main columns */
+  guidedMainBottomPad?: boolean
 }
 
 export function AppointmentConfirmedPage({
   variant = 'appointmentConfirmed',
   onLogoHome,
   onReviewHandoffNavigate,
+  guidedMainBottomPad = false,
 }: AppointmentConfirmedPageProps = {}) {
   const [rating, setRating] = useState(0)
   const [starHover, setStarHover] = useState<number | null>(null)
@@ -384,7 +388,11 @@ export function AppointmentConfirmedPage({
           </button>
         </nav>
 
-        <main className={styles.main}>
+        <main
+          className={[styles.main, guidedMainBottomPad ? guidedStyles.guidedMainBottomPad : '']
+            .filter(Boolean)
+            .join(' ')}
+        >
           <div
             className={[styles.layout, showSubmitTransitionOverlay ? styles.bookingLocked : '']
               .filter(Boolean)

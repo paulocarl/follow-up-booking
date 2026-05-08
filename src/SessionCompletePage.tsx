@@ -2,7 +2,9 @@ import gsap from 'gsap'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { SiteFooter } from './SiteFooter'
 import { captureSessionPageHeightForHandoff } from './sessionPageHandoff'
+import guidedStyles from './GuidedFlow.module.css'
 import styles from './SessionCompletePage.module.css'
+import { useEntranceReveal } from './useEntranceReveal'
 
 type DateChoice = {
   weekday: string
@@ -80,17 +82,35 @@ function prefersReducedMotion(): boolean {
 
 type SessionCompletePageProps = {
   onBookSessionComplete: () => void
+  /** Figma guided “feel good” path uses “Continue your progress”. */
+  heroTitle?: string
+  /** “Continue your progress” omits the browse promo; default session-complete keeps it. */
+  showBrowseProvidersFooter?: boolean
+  /** Hide “Appointment not over yet?” / Rejoin waiting room under the booking column. */
+  showRejoinWaitingFooter?: boolean
+  /** Guided “Continue your progress” — extra invisible padding under main */
+  guidedMainBottomPad?: boolean
 }
 
-export function SessionCompletePage({ onBookSessionComplete }: SessionCompletePageProps) {
+export function SessionCompletePage({
+  onBookSessionComplete,
+  heroTitle = 'Your session is complete',
+  showBrowseProvidersFooter = true,
+  showRejoinWaitingFooter = true,
+  guidedMainBottomPad = false,
+}: SessionCompletePageProps) {
+  const entranceRootRef = useRef<HTMLDivElement>(null)
   const bookingOverlayRef = useRef<HTMLDivElement>(null)
   const navLogoRef = useRef<HTMLDivElement>(null)
+  useEntranceReveal(entranceRootRef)
 
   const [selectedDateIdx, setSelectedDateIdx] = useState(0)
   const [selectedTime, setSelectedTime] = useState<string | null>(null)
   const [desktopDateWindowStart, setDesktopDateWindowStart] = useState(0)
   const [isBooking, setIsBooking] = useState(false)
   const [isBookingTransitioning, setIsBookingTransitioning] = useState(false)
+  const [bookingCtaLockBox, setBookingCtaLockBox] = useState<{ w: number; h: number } | null>(null)
+  const bookingCtaRef = useRef<HTMLButtonElement>(null)
 
   const desktopDatesShown = DATE_OPTIONS.slice(
     desktopDateWindowStart,
@@ -136,6 +156,12 @@ export function SessionCompletePage({ onBookSessionComplete }: SessionCompletePa
 
   const handleBookSession = useCallback(async () => {
     if (isBooking) return
+
+    const btn = bookingCtaRef.current
+    if (btn) {
+      const r = btn.getBoundingClientRect()
+      setBookingCtaLockBox({ w: r.width, h: r.height })
+    }
 
     setIsBooking(true)
     await new Promise((r) => setTimeout(r, BOOKING_BUTTON_HOLD_MS))
@@ -183,7 +209,7 @@ export function SessionCompletePage({ onBookSessionComplete }: SessionCompletePa
   }, [isBooking, onBookSessionComplete])
 
   return (
-    <div className={styles.page}>
+    <div className={styles.page} ref={entranceRootRef}>
       <div className={styles.shell}>
         <nav aria-label="Site" className={styles.nav}>
           <div ref={navLogoRef} className={styles.logoWrap}>
@@ -197,11 +223,31 @@ export function SessionCompletePage({ onBookSessionComplete }: SessionCompletePa
           </div>
         </nav>
 
-        <main className={styles.main}>
+        <main
+          className={[styles.main, guidedMainBottomPad ? guidedStyles.guidedMainBottomPad : '']
+            .filter(Boolean)
+            .join(' ')}
+        >
         <div className={styles.layout}>
-          <div className={styles.leftStack}>
+          <div className={styles.leftStack} data-confirm-reveal>
             <header className={styles.hero}>
-              <h1 className={styles.display}>Your session is complete</h1>
+              <h1
+                className={
+                  heroTitle === 'Continue your progress'
+                    ? `${styles.display} ${styles.displayContinueProgressHeading}`
+                    : styles.display
+                }
+              >
+                {heroTitle === 'Continue your progress' ? (
+                  <>
+                    Continue your
+                    <br />
+                    progress
+                  </>
+                ) : (
+                  heroTitle
+                )}
+              </h1>
             </header>
             <p className={styles.intro}>
               You and Anita don’t have a next session booked — schedule your next session.
@@ -212,6 +258,7 @@ export function SessionCompletePage({ onBookSessionComplete }: SessionCompletePa
             className={[styles.booking, isBooking ? styles.bookingLocked : ''].join(' ')}
             aria-label="Book a follow-up"
             aria-busy={isBooking}
+            data-confirm-reveal
           >
             <div className={styles.bookingInner}>
               <div className={styles.dayPickerHeader}>
@@ -280,6 +327,7 @@ export function SessionCompletePage({ onBookSessionComplete }: SessionCompletePa
 
             <section className={styles.actions} aria-label="Finalize booking">
               <button
+                ref={bookingCtaRef}
                 type="button"
                 className={[
                   styles.primaryCta,
@@ -287,6 +335,18 @@ export function SessionCompletePage({ onBookSessionComplete }: SessionCompletePa
                 ]
                   .filter(Boolean)
                   .join(' ')}
+                style={
+                  isBooking && bookingCtaLockBox != null
+                    ? {
+                        width: `${bookingCtaLockBox.w}px`,
+                        minWidth: `${bookingCtaLockBox.w}px`,
+                        height: `${bookingCtaLockBox.h}px`,
+                        minHeight: `${bookingCtaLockBox.h}px`,
+                        flexShrink: 0,
+                        boxSizing: 'border-box',
+                      }
+                    : undefined
+                }
                 disabled={isBooking}
                 aria-busy={isBooking}
                 onClick={handleBookSession}
@@ -302,7 +362,19 @@ export function SessionCompletePage({ onBookSessionComplete }: SessionCompletePa
               </button>
             </section>
 
-            <footer className={styles.bookingFooter}>
+            {showBrowseProvidersFooter || showRejoinWaitingFooter ? (
+            <footer
+              className={[
+                styles.bookingFooter,
+                !showBrowseProvidersFooter &&
+                showRejoinWaitingFooter
+                  ? styles.bookingFooterRejoinOnly
+                  : '',
+              ]
+                .filter(Boolean)
+                .join(' ')}
+            >
+              {showBrowseProvidersFooter ? (
               <section
                 className={styles.browseProvidersAction}
                 aria-label="Browse other therapists"
@@ -318,6 +390,8 @@ export function SessionCompletePage({ onBookSessionComplete }: SessionCompletePa
                   Browse providers
                 </a>
               </section>
+              ) : null}
+              {showRejoinWaitingFooter ? (
               <div className={styles.rejoinFooterBlock}>
                 <div className={styles.rejoinRow}>
                   <span className={styles.mutedSmall}>Appointment not over yet?</span>
@@ -326,7 +400,9 @@ export function SessionCompletePage({ onBookSessionComplete }: SessionCompletePa
                   </a>
                 </div>
               </div>
+              ) : null}
             </footer>
+            ) : null}
           </section>
         </div>
 
