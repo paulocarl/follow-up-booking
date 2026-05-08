@@ -377,17 +377,16 @@ export function SessionCompletePage({
               {showBrowseProvidersFooter ? (
               <section
                 className={styles.browseProvidersAction}
-                aria-label="Browse other therapists"
+                aria-label="Unlock more from Grow"
               >
                 <div className={styles.browseProvidersCopy}>
-                  <p className={styles.browseProvidersTitle}>Browse other providers</p>
+                  <p className={styles.browseProvidersTitle}>Unlock more from Grow</p>
                   <p className={styles.browseProvidersBody}>
-                    Discover therapists with different approaches, backgrounds, and expertise to find
-                    your best fit.
+                    Message your provider, manage billing, and more
                   </p>
                 </div>
                 <a className={styles.browseProvidersCta} href="#">
-                  Browse providers
+                  Go to my Dashboard
                 </a>
               </section>
               ) : null}

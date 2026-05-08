@@ -44,7 +44,7 @@ export function GuidedTakeTimePage() {
                   <div className={thankYouStyles.actionText}>
                     <p className={thankYouStyles.actionTitle}>Unlock more from Grow</p>
                     <p className={thankYouStyles.actionDesc}>
-                      Message your provider, reschedule appointments, manage billing, and more
+                      Message your provider, manage billing, and more
                     </p>
                   </div>
                   <button

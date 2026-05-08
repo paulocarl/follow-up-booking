@@ -861,7 +861,7 @@
   }
 }
 
-/* Footer stack: Figma 1228:95613 “Browse providers” promo, then rejoin row */
+/* Footer stack: dashboard promo (“Unlock more from Grow”), then rejoin row */
 
 .browseProvidersAction {
   display: flex;
@@ -889,7 +889,7 @@
   }
 }
 
-/* typography/label/emphasis/default — “Browse other providers” */
+/* typography/label/emphasis/default — promo title */
 .browseProvidersTitle {
   margin: 0;
   font-family: var(--font-sans);
